@@ -1,17 +1,48 @@
-domain_file = '/Users/isafronov/Desktop/23/domains_eugene.txt'
-out_file = '/Users/isafronov/Desktop/23/urls.txt'
+#!/usr/bin/env python
+import argparse
+import os
 
+#domain_file = '/Users/isafronov/Desktop/23/domains_eugene.txt'
+#out_file = '/Users/isafronov/Desktop/23/urls.txt'
+
+def is_valid_file(parser, arg):
+    if not os.path.exists(arg):
+        parser.error("The file %s does not exist!" % arg)
+    else:
+        return open(arg, 'r')  # return an open file handle
+
+#arguments
+parser = argparse.ArgumentParser(description='Takes the list of domains and gets screenshots of web services running on them (80,443 ports)')
+parser.add_argument("-i", dest="infile", required=False,
+                    help="input file with domains,one domain per line", metavar="FILE",
+                    type=lambda x: is_valid_file(parser, x))
+parser.add_argument("-o", dest="outfile", required=False, default=(os.getcwd()+'/urls.txt'),
+                    help="file to output all urls", metavar="FILE")
+parser.add_argument("-c", dest="configfile", required=False, default=(os.getcwd()+'/config.yml'),
+                    help="screenshotconfig file", metavar="FILE")
+parser.add_argument(dest="infile")
+
+args = parser.parse_args()
+
+
+
+#check if file exists
 
 
 def domains_to_urls(arr_of_domains):
-    with open(out_file,'w') as out:
+    url_list = []
+    with open(args.outfile,'w') as out:
         for elem in arr_of_domains:
             if elem[2]:
                 if elem[1] == 80:
-                    out.write('http://'+elem[0]+'\n')
+                    line = 'http://'+elem[0]+'\n'
+                    url_list.append(line)
+                    out.write(line)
                 if elem[1] == 443:
-                    out.write('https://'+elem[0]+'\n')
-    return
+                    line = 'https://'+elem[0]+'\n'
+                    url_list.append(line)
+                    out.write(line)
+    return url_list
 
 
 def check_if_http(dests,ports):
@@ -45,12 +76,27 @@ def check_if_http(dests,ports):
     print('Total time: ', time.time() - now)
     return future.result()
 
+def write_config(_url_list):
+    #copy default config to new config
+    with open(os.path.dirname(os.path.abspath(__file__))+'/default_config.yml','r') as default_config:
+        with open(args.configfile, 'w') as config_file:
+            for line in default_config:
+                config_file.write(line)
+            for line in _url_list:
+                config_file.write(' '+line)
+    return
 
 
-with open(domain_file) as f:
-    results = check_if_http(f.read().splitlines(),[80,443])
 
-domains_to_urls(results)
+
+
+
+if __name__ == '__main__':
+    with open(args.infile) as f:
+        results = check_if_http(f.read().splitlines(),[80,443])
+        url_list = domains_to_urls(results)
+        write_config(url_list)
+
 
 
 

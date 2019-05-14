@@ -1,0 +1,39 @@
+###
+# User Options
+##
+
+# List screen widths to take snapshots
+screenSizes: [1920]
+
+# Output directory path. Note: It will be cleared!
+# Set to blank if you'd like to skip it.
+outPdfDir: 'out-pdf'
+outJpgDir: 'out-jpg'
+
+# Jpg quality -- doesn't apply to pdf outputs
+quality: 80
+
+
+
+
+# If you'd like to add additional HTTP headers, specify them here
+extraHttpHeaders:
+  Accept-Encoding: gzip, deflate, br # mimics standard Chrome XHR
+  # Accept-Encoding: br, gzip, deflate # mimics standard Safari XHR
+
+# Padding -- number of 0s to pad snapshots
+padding: 2
+
+# Wait for loading until this number of connections are left.
+# Decrease if your snaps look like they didn't finish loading
+# Options are 0 and 2 only.
+networkIdleLevel: 2
+
+
+###
+# Computed Options - Leave these alone
+##
+
+urls: []
+
+urlsRaw: |-
