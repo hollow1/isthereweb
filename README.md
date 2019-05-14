@@ -2,7 +2,7 @@
 
 
 Usage:
-``./istereweb.py -i <file with domains>``
+``./isthereweb.py -i <file with domains>``
 
 
 It will generate a list of urls and config for `chrome-bulk-screenshot`.
@@ -16,4 +16,4 @@ Modified version of that package included in this repo.
 Just replace:  
 `/usr/local/lib/node_modules/chrome-bulk-screenshot/index.js`  
 
- with  `index.js` fro this repo.
+ with  `index.js` from this repo.
